@@ -1,0 +1,59 @@
+---
+name: FABRIX TX module build
+on:
+  push:
+    branches:
+      - 'FABRIX'
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build FABRIX TX module firmware
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Get hardware targets and set FABRIX names
+        run: |
+          git clone --depth 1 https://github.com/ExpressLRS/targets src/hardware
+          python3 - <<'PY'
+          import json
+          p = 'src/hardware/targets.json'
+          t = json.load(open(p))
+          c = t['radiomaster']['tx_2400']['pocket']
+          c['product_name'] = 'FABRIX TX Internal 2.4GHz'
+          c['lua_name'] = 'FABRIX TX'
+          json.dump(t, open(p, 'w'), indent=2)
+          print(c)
+          PY
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Install PlatformIO
+        run: |
+          python -m pip install --upgrade pip
+          pip install platformio wheel
+
+      - name: Build firmware
+        run: |
+          cd src
+          PLATFORMIO_BUILD_FLAGS="-DRegulatory_Domain_ISM_2400" pio run -e Unified_ESP32_2400_TX_via_WIFI
+          mkdir -p ../out
+          cp .pio/build/Unified_ESP32_2400_TX_via_WIFI/firmware.bin ../out/fabrix-tx-module.bin
+          cp lua/elrsV3.lua ../out/FABRIX.lua
+          cp ../LICENSE ../out/LICENSE
+          ls -l ../out
+
+      - name: Upload firmware
+        uses: actions/upload-artifact@v4
+        with:
+          name: fabrix-tx-module
+          path: out/*
+          retention-days: 30
+          if-no-files-found: error
