@@ -1,4 +1,4 @@
--- TNS|ExpressLRS|TNE
+-- TNS|FABRIX|TNE
 ---- #########################################################################
 ---- #                                                                       #
 ---- # Copyright (C) OpenTX, adapted for ExpressLRS                          #
@@ -906,7 +906,7 @@ local function checkCrsfModule()
   -- No CRSF module found, save an error message for run()
   lcd.clear()
   local y = 0
-  lcd.drawText(2, y, "  No ExpressLRS", MIDSIZE)
+  lcd.drawText(2, y, "  No FABRIX TX", MIDSIZE)
   y = y + (textSize * 2) - 2
   local msgs = {
     " Enable a CRSF Internal",

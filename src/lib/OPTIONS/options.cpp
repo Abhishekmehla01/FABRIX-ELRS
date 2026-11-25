@@ -15,13 +15,13 @@ const char version[] = {LATEST_VERSION, 0};
 #endif
 
 #if defined(TARGET_TX)
-const char *wifi_hostname = "elrs_tx";
-const char *wifi_ap_ssid = "ExpressLRS TX";
+const char *wifi_hostname = "fabrix_tx";
+const char *wifi_ap_ssid = "FABRIX TX";
 #else
-const char *wifi_hostname = "elrs_rx";
-const char *wifi_ap_ssid = "ExpressLRS RX";
+const char *wifi_hostname = "fabrix_rx";
+const char *wifi_ap_ssid = "FABRIX RX";
 #endif
-const char *wifi_ap_password = "expresslrs";
+const char *wifi_ap_password = "fabrixtx";
 const char *wifi_ap_address = "10.0.0.1";
 
 #if !defined(TARGET_UNIFIED_TX) && !defined(TARGET_UNIFIED_RX)
